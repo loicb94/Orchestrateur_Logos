@@ -15,8 +15,11 @@ public class BanqueServiceImpl implements BanqueService {
 	@Override
 	@WebMethod
 	public ReponsePaiement demanderPaiement(DemandePaiement demande) {
-		// TODO
-		return new ReponsePaiement(true);
+		if(demande.getNumeroCarte().equals("1234567891011123") && demande.getCvv().equals("123") && demande.getMoisExpiration() == 12 && demande.getAnneeExpiration() == 2018){
+			return new ReponsePaiement(true);
+		}else{
+			return new ReponsePaiement(false);
+		}
 	}
 
 }

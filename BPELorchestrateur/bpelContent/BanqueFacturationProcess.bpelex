@@ -26,6 +26,6 @@
   </extensions>
   <extensions>
     <extendedObject href="BanqueFacturationProcess.bpel#/"/>
-    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:ProcessExtension" modificationStamp="1513784191075"/>
+    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:ProcessExtension" modificationStamp="1513784316727"/>
   </extensions>
 </extensionmodel:ExtensionMap>

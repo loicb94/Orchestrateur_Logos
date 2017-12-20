@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bpelOrchestrateur.mylogos.top" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://service.mylogos.top/" name="BanqueFacturationProcess" targetNamespace="http://bpelOrchestrateur.mylogos.top">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bpelOrchestrateur.mylogos.top" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://service.mylogos.top/" xmlns:wsdl1="http://ws.mylogos.top/" name="BanqueFacturationProcess" targetNamespace="http://bpelOrchestrateur.mylogos.top">
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      TYPE DEFINITION - List of types participating in this BPEL process 
@@ -13,8 +13,12 @@
     <plnk:partnerLinkType name="Facturation">
     <plnk:role name="facturer" portType="wsdl:FacturationService"/>
   </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Transfert">
+    <plnk:role name="transferrer" portType="wsdl1:IServiceBoutiqueBanque"/>
+  </plnk:partnerLinkType>
     <import location="WSBanque.wsdl" namespace="http://service.mylogos.top/"/>
     <import location="WSFacturation.wsdl" namespace="http://service.mylogos.top/"/>
+    <import location="WSBoutiqueBanque.wsdl" namespace="http://ws.mylogos.top/"/>
     <types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://bpelOrchestrateur.mylogos.top">
 

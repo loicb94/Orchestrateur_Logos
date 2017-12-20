@@ -8,6 +8,7 @@
          >
 
     <!-- Import the client WSDL -->
+    <bpel:import namespace="http://ws.mylogos.top/" location="WSBoutiqueBanque.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
     <bpel:import namespace="http://service.mylogos.top/" location="WSFacturation.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
     <bpel:import namespace="http://service.mylogos.top/" location="WSBanque.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
     <bpel:import location="BanqueFacturationProcessArtifacts.wsdl" namespace="http://bpelOrchestrateur.mylogos.top" 
@@ -25,6 +26,7 @@
                      />
         <bpel:partnerLink name="PartnerLinkBanque" partnerLinkType="tns:Paiement" partnerRole="payer"></bpel:partnerLink>
         <bpel:partnerLink name="PartnerLinkFacturation" partnerLinkType="tns:Facturation" partnerRole="facturer"></bpel:partnerLink>
+        <bpel:partnerLink name="PartnerLinkBoutique" partnerLinkType="tns:Transfert" partnerRole="transferrer"></bpel:partnerLink>
     </bpel:partnerLinks>
   
     <!-- ================================================================= -->         

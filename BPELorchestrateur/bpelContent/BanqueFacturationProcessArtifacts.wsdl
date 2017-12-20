@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<definitions name="banquefacturation"
-        targetNamespace="http://BPELorchestrator.mylogos.top"
-        xmlns:tns="http://BPELorchestrator.mylogos.top"
+<definitions name="BanqueFacturationProcess"
+        targetNamespace="http://bpelOrchestrateur.mylogos.top"
+        xmlns:tns="http://bpelOrchestrateur.mylogos.top"
         xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -15,22 +15,25 @@
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
     <types>
         <schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
-                targetNamespace="http://BPELorchestrator.mylogos.top" 
+                targetNamespace="http://bpelOrchestrateur.mylogos.top" 
                 xmlns="http://www.w3.org/2001/XMLSchema">
 
-            <element name="banquefacturationRequest">
+            <element name="BanqueFacturationProcessRequest">
                 <complexType>
                     <sequence>
-                        <element name="input" type="string"/>
+                    	<element name="informationBancaire"
+                    		type="string" />
+                    	<element name="utilisateur" type="string"></element>
+                    	<element name="commande" type="string"></element>
                     </sequence>
                 </complexType>
             </element>
-            
 
-            <element name="banquefacturationResponse">
+            <element name="BanqueFacturationProcessResponse">
                 <complexType>
                     <sequence>
-                        <element name="result" type="string"/>
+                    	<element name="reponsePaiement" type="boolean" />
+                    	<element name="numeroFacture" type="int"></element>
                     </sequence>
                 </complexType>
             </element>
@@ -42,11 +45,11 @@
      MESSAGE TYPE DEFINITION - Definition of the message types used as 
      part of the port type defintions
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
-    <message name="banquefacturationRequestMessage">
-        <part name="payload" element="tns:banquefacturationRequest"/>
+    <message name="BanqueFacturationProcessRequestMessage">
+        <part name="payload" element="tns:BanqueFacturationProcessRequest"/>
     </message>
-    <message name="banquefacturationResponseMessage">
-        <part name="payload" element="tns:banquefacturationResponse"/>
+    <message name="BanqueFacturationProcessResponseMessage">
+        <part name="payload" element="tns:BanqueFacturationProcessResponse"/>
     </message>
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,18 +57,18 @@
      a logical service unit.
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
 
-    <!-- portType implemented by the banquefacturation BPEL process -->
-    <portType name="banquefacturation">
+    <!-- portType implemented by the BanqueFacturationProcess BPEL process -->
+    <portType name="BanqueFacturationProcess">
         <operation name="process">
-            <input  message="tns:banquefacturationRequestMessage" />
-            <output message="tns:banquefacturationResponseMessage"/>
+            <input  message="tns:BanqueFacturationProcessRequestMessage" />
+            <output message="tns:BanqueFacturationProcessResponseMessage"/>
         </operation>
     </portType>   
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      PARTNER LINK TYPE DEFINITION
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
-    <plnk:partnerLinkType name="banquefacturation">
-        <plnk:role name="banquefacturationProvider" portType="tns:banquefacturation"/>
+    <plnk:partnerLinkType name="BanqueFacturationProcess">
+        <plnk:role name="BanqueFacturationProcessProvider" portType="tns:BanqueFacturationProcess"/>
     </plnk:partnerLinkType>
     
 
@@ -73,12 +76,12 @@
      BINDING DEFINITION - Defines the message format and protocol details
      for a web service.
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <binding name="banquefacturationBinding" type="tns:banquefacturation">
+    <binding name="BanqueFacturationProcessBinding" type="tns:BanqueFacturationProcess">
     	<soap:binding style="document"
     		transport="http://schemas.xmlsoap.org/soap/http" />
     	<operation name="process">
     		<soap:operation
-    			soapAction="http://BPELorchestrator.mylogos.top/process" />
+    			soapAction="http://bpelOrchestrateur.mylogos.top/process" />
     		<input>
     			<soap:body use="literal" />
     		</input>
@@ -92,9 +95,9 @@
      SERVICE DEFINITION - A service groups a set of ports into
      a service unit.
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <service name="banquefacturationService">
-    	<port name="banquefacturationPort" binding="tns:banquefacturationBinding">
-    		<soap:address location="http://localhost:8080/banquefacturation" />
+    <service name="BanqueFacturationProcessService">
+    	<port name="BanqueFacturationProcessPort" binding="tns:BanqueFacturationProcessBinding">
+    		<soap:address location="http://localhost:8080/BanqueFacturationProcess" />
     	</port>
     </service>
 </definitions>

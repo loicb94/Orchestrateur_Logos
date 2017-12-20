@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.mylogos.top/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="ServiceBoutiqueBanqueService" targetNamespace="http://ws.mylogos.top/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.mylogos.top/" elementFormDefault="unqualified" targetNamespace="http://ws.mylogos.top/" version="1.0">
+
+  <xs:element name="transfertDemandeFacturation" type="tns:transfertDemandeFacturation"/>
+
+  <xs:element name="transfertDemandeFacturationResponse" type="tns:transfertDemandeFacturationResponse"/>
+
+  <xs:element name="transfertDemandePaiement" type="tns:transfertDemandePaiement"/>
+
+  <xs:element name="transfertDemandePaiementResponse" type="tns:transfertDemandePaiementResponse"/>
+
+  <xs:complexType name="transfertDemandeFacturation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:demandeFacturation"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="demandeFacturation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="commande" type="tns:commande"/>
+      <xs:element minOccurs="0" name="utilisateur" type="tns:utilisateur"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="commande">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="adresse" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ligneCommande" nillable="true" type="tns:ligneCommande"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ligneCommande">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="commande" type="tns:commande"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="produit" type="tns:produit"/>
+      <xs:element minOccurs="0" name="quantite" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="produit">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="categorie" type="tns:categorie"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="langue" type="tns:langue"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listeImagesProduit" nillable="true" type="tns:imagesProduit"/>
+      <xs:element minOccurs="0" name="nom" type="xs:string"/>
+      <xs:element name="prix" type="xs:double"/>
+      <xs:element minOccurs="0" name="quantite" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="categorie">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="libelle" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listeProduitsByCategorie" nillable="true" type="tns:produit"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="langue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codeIso" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="libelle" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listeProduitsByLangue" nillable="true" type="tns:produit"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="imagesProduit">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="produit" type="tns:produit"/>
+      <xs:element minOccurs="0" name="urlImage" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="utilisateur">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
+      <xs:element name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="nom" type="xs:string"/>
+      <xs:element minOccurs="0" name="prenom" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="transfertDemandeFacturationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:demandeFacturation"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="transfertDemandePaiement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:informationBancaire"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="informationBancaire">
+    <xs:sequence>
+      <xs:element name="anneeExpiration" type="xs:int"/>
+      <xs:element minOccurs="0" name="cleClient" type="xs:string"/>
+      <xs:element minOccurs="0" name="cvv" type="xs:string"/>
+      <xs:element name="moisExpiration" type="xs:int"/>
+      <xs:element name="montant" type="xs:double"/>
+      <xs:element minOccurs="0" name="nomPorteur" type="xs:string"/>
+      <xs:element minOccurs="0" name="numeroCarte" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="transfertDemandePaiementResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:informationBancaire"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="transfertDemandeFacturation">
+    <wsdl:part element="tns:transfertDemandeFacturation" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="transfertDemandeFacturationResponse">
+    <wsdl:part element="tns:transfertDemandeFacturationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="transfertDemandePaiementResponse">
+    <wsdl:part element="tns:transfertDemandePaiementResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="transfertDemandePaiement">
+    <wsdl:part element="tns:transfertDemandePaiement" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IServiceBoutiqueBanque">
+    <wsdl:operation name="transfertDemandeFacturation">
+      <wsdl:input message="tns:transfertDemandeFacturation" name="transfertDemandeFacturation">
+    </wsdl:input>
+      <wsdl:output message="tns:transfertDemandeFacturationResponse" name="transfertDemandeFacturationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="transfertDemandePaiement">
+      <wsdl:input message="tns:transfertDemandePaiement" name="transfertDemandePaiement">
+    </wsdl:input>
+      <wsdl:output message="tns:transfertDemandePaiementResponse" name="transfertDemandePaiementResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceBoutiqueBanqueServiceSoapBinding" type="tns:IServiceBoutiqueBanque">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="transfertDemandeFacturation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="transfertDemandeFacturation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="transfertDemandeFacturationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="transfertDemandePaiement">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="transfertDemandePaiement">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="transfertDemandePaiementResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServiceBoutiqueBanqueService">
+    <wsdl:port binding="tns:ServiceBoutiqueBanqueServiceSoapBinding" name="ServiceBoutiqueBanquePort">
+      <soap:address location="http://localhost:8180/boutique_service/ws/banque"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

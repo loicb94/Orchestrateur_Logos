@@ -98,7 +98,7 @@
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <service name="BanqueFacturationProcessService">
     	<port binding="tns:BanqueFacturationProcessBinding" name="BanqueFacturationProcessPort">
-    		<soap:address location="http://localhost:8080/BanqueFacturationProcess"/>
+    		<soap:address location="http://localhost:8080/ode/processes/BanqueFacturationProcess"/>
     	</port>
     </service>
 </definitions>

@@ -5,7 +5,7 @@
          suppressJoinFailure="yes"
          xmlns:tns="http://bpelOrchestrateur.mylogos.top"
          xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
-         >
+         xmlns:ns="http://service.mylogos.top/">
 
     <!-- Import the client WSDL -->
     <bpel:import namespace="http://ws.mylogos.top/" location="WSBoutiqueBanque.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
@@ -43,6 +43,10 @@
           -->
         <bpel:variable name="output"
                   messageType="tns:BanqueFacturationProcessResponseMessage"/>
+        <bpel:variable name="PartnerLinkBanqueResponse" messageType="ns:demanderPaiementResponse"></bpel:variable>
+        <bpel:variable name="PartnerLinkBanqueRequest" messageType="ns:demanderPaiement"></bpel:variable>
+        <bpel:variable name="PartnerLinkFacturationResponse" messageType="ns:responseFacturationResponse"></bpel:variable>
+        <bpel:variable name="PartnerLinkFacturationRequest" messageType="ns:responseFacturation"></bpel:variable>
     </bpel:variables>
 
     <!-- ================================================================= -->         
@@ -59,8 +63,163 @@
                  portType="tns:BanqueFacturationProcess"
                  operation="process" variable="input"
                  createInstance="yes"/>
-        <bpel:empty name="FIX_ME-Add_Business_Logic_Here"></bpel:empty>
+        
         <!-- Generate reply to synchronous request -->
+        <bpel:assign validate="no" name="AssignDemandePaiement">
+            
+            <bpel:copy>
+                <bpel:from><bpel:literal><tns:demanderPaiement xmlns:tns="http://service.mylogos.top/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <arg0>
+    <anneeExpiration>0</anneeExpiration>
+    <cleClient>cleClient</cleClient>
+    <cvv>cvv</cvv>
+    <moisExpiration>0</moisExpiration>
+    <montant>0.0</montant>
+    <nomPorteur>nomPorteur</nomPorteur>
+    <numeroCarte>numeroCarte</numeroCarte>
+  </arg0>
+</tns:demanderPaiement>
+</bpel:literal></bpel:from>
+                <bpel:to variable="PartnerLinkBanqueRequest" part="parameters"></bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+                <bpel:from part="payload" variable="input">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:informationBancaire]]></bpel:query>
+                </bpel:from>
+                <bpel:to part="parameters" variable="PartnerLinkBanqueRequest">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+                        <![CDATA[arg0]]>
+                    </bpel:query>
+                </bpel:to>
+            </bpel:copy>
+        </bpel:assign>
+        <bpel:invoke name="InvokeBanque" partnerLink="PartnerLinkBanque" operation="demanderPaiement" inputVariable="PartnerLinkBanqueRequest" outputVariable="PartnerLinkBanqueResponse"></bpel:invoke>
+        <bpel:if name="If">
+            <bpel:condition expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[$PartnerLinkBanqueResponse.parameters/tns:reponsePaiement != false]]></bpel:condition>
+            <bpel:sequence name="Sequence">
+                <bpel:assign validate="no" name="AssignFacturation">
+                    <bpel:copy>
+                        <bpel:from><bpel:literal><tns:responseFacturation xmlns:tns="http://service.mylogos.top/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <arg0>
+    <adresse>adresse</adresse>
+    <id>0</id>
+    <ligneCommande>
+      <commande></commande>
+      <id>0</id>
+      <produit>
+        <id>0</id>
+        <nom>nom</nom>
+        <prix>0.0</prix>
+        <quantite>0</quantite>
+      </produit>
+      <quantite>0</quantite>
+    </ligneCommande>
+  </arg0>
+  <arg1>
+    <id>0</id>
+    <mail>mail</mail>
+    <nom>nom</nom>
+    <prenom>prenom</prenom>
+  </arg1>
+</tns:responseFacturation>
+</bpel:literal></bpel:from>
+                        <bpel:to part="parameters" variable="PartnerLinkFacturationRequest">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[arg0]]></bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="payload" variable="input">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:commande]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to part="parameters" variable="PartnerLinkFacturationRequest">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[arg0]]></bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="payload" variable="input">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:utilisateur]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to part="parameters" variable="PartnerLinkFacturationRequest">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+                                <![CDATA[arg1]]>
+                            </bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+                <bpel:invoke name="InvokeFacturation" partnerLink="PartnerLinkFacturation" operation="responseFacturation" inputVariable="PartnerLinkFacturationRequest" outputVariable="PartnerLinkFacturationResponse"></bpel:invoke>
+                <bpel:assign validate="no" name="AssignNumeroFacturation">
+                    <bpel:copy>
+                        <bpel:from><bpel:literal><tns:responseFacturationResponse xmlns:tns="http://service.mylogos.top/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <return>0</return>
+</tns:responseFacturationResponse>
+</bpel:literal></bpel:from>
+                        <bpel:to variable="PartnerLinkFacturationResponse" part="parameters"></bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="payload" variable="output">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:numeroFacture]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to part="parameters" variable="PartnerLinkFacturationResponse">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+            </bpel:sequence>
+            <bpel:else>
+                <bpel:assign validate="no" name="AssignOutput">
+                    <bpel:copy>
+                        <bpel:from><bpel:literal><tns:BanqueFacturationProcessResponse xmlns:tns="http://bpelOrchestrateur.mylogos.top" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <tns:reponsePaiement>true</tns:reponsePaiement>
+  <tns:numeroFacture>0</tns:numeroFacture>
+</tns:BanqueFacturationProcessResponse>
+</bpel:literal></bpel:from>
+                        <bpel:to variable="output" part="payload"></bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="parameters" variable="PartnerLinkBanqueResponse">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to part="payload" variable="output"></bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="parameters" variable="PartnerLinkFacturationResponse">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+                                <![CDATA[return]]>
+                            </bpel:query>
+                        </bpel:from>
+                        <bpel:to part="payload" variable="output">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:numeroFacture]]></bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+            </bpel:else>
+        </bpel:if>
+        <bpel:assign validate="no" name="AssignOutput">
+            <bpel:copy>
+                <bpel:from><bpel:literal><tns:BanqueFacturationProcessResponse xmlns:tns="http://bpelOrchestrateur.mylogos.top" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <tns:reponsePaiement>true</tns:reponsePaiement>
+  <tns:numeroFacture>0</tns:numeroFacture>
+</tns:BanqueFacturationProcessResponse>
+</bpel:literal></bpel:from>
+                <bpel:to variable="output" part="payload"></bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+                <bpel:from part="parameters" variable="PartnerLinkBanqueResponse">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                </bpel:from>
+                <bpel:to part="payload" variable="output">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:reponsePaiement]]></bpel:query>
+                </bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+                <bpel:from part="parameters" variable="PartnerLinkFacturationResponse">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                </bpel:from>
+                <bpel:to part="payload" variable="output">
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:numeroFacture]]></bpel:query>
+                </bpel:to>
+            </bpel:copy>
+        </bpel:assign>
         <bpel:reply name="replyOutput" 
                partnerLink="client"
                portType="tns:BanqueFacturationProcess"

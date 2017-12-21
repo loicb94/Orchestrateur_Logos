@@ -7,13 +7,7 @@ public class Commande {
 	private List<LigneCommande> ligneCommande;
 	private String adresse;
 
-	public int getId() {
-		return id;
-	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public List<LigneCommande> getLigneCommande() {
 		return ligneCommande;
@@ -31,13 +25,21 @@ public class Commande {
 		this.adresse = adresse;
 	}
 
-	public Commande(int id, List<LigneCommande> ligneCommande, String adresse) {
-		this.id = id;
+	public Commande(List<LigneCommande> ligneCommande, String adresse) {
+
 		this.ligneCommande = ligneCommande;
 		this.adresse = adresse;
 	}
 
 	public Commande() {
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

@@ -1,10 +1,17 @@
 package top.mylogos.entity;
 
+import java.util.List;
+
 public class Produit {
 	private int id;
 	private String nom;
+	private String description;
+	private List<ImagesProduit> listeImagesProduit;
+	private Langue langue;
+	private Categorie categorie;
 	private double prix;
 	private int quantite;
+	private Double prixPremium;
 
 	public int getId() {
 		return id;
@@ -46,6 +53,46 @@ public class Produit {
 	}
 
 	public Produit() {
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<ImagesProduit> getListeImagesProduit() {
+		return listeImagesProduit;
+	}
+
+	public void setListeImagesProduit(List<ImagesProduit> listeImagesProduit) {
+		this.listeImagesProduit = listeImagesProduit;
+	}
+
+	public Langue getLangue() {
+		return langue;
+	}
+
+	public void setLangue(Langue langue) {
+		this.langue = langue;
+	}
+
+	public Categorie getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(Categorie categorie) {
+		this.categorie = categorie;
+	}
+
+	public Double getPrixPremium() {
+		return prixPremium;
+	}
+
+	public void setPrixPremium(Double prixPremium) {
+		this.prixPremium = prixPremium;
 	}
 
 }

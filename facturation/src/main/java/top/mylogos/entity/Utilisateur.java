@@ -1,30 +1,23 @@
 package top.mylogos.entity;
 
 public class Utilisateur {
-
 	private int id;
 	private String nom;
 	private String prenom;
-	private String mail;
+	private String email;
 
 
 	public Utilisateur() {
 	}
 
-	public Utilisateur(int id, String nom, String prenom, String mail) {
-		this.id = id;
+	public Utilisateur(int id, String nom, String prenom, String email) {
+
 		this.nom = nom;
 		this.prenom = prenom;
-		this.mail = mail;
+		this.email = email;
 	}
 
-	public int getId() {
-		return id;
-	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getNom() {
 		return nom;
@@ -42,12 +35,20 @@ public class Utilisateur {
 		this.prenom = prenom;
 	}
 
-	public String getMail() {
-		return mail;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setMail(String mail) {
-		this.mail = mail;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

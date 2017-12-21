@@ -23,7 +23,8 @@ public class FacturationServiceImpl implements FacturationService {
 	public String responseFacturation(String commande, String utilisateur) {
 		int numDeFactureFake = 123456789;
 		String fakeNumber = Integer.toString(numDeFactureFake);
-
+		System.out.println(commande);
+		System.out.println(utilisateur);
 		ObjectMapper mapper = new ObjectMapper();
 		Commande commandeObj;
 		System.out.println("Je suis bien dans le WS facturation");

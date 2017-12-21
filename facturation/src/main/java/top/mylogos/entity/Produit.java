@@ -12,6 +12,7 @@ public class Produit {
 	private double prix;
 	private int quantite;
 	private Double prixPremium;
+	private Integer premium;
 
 	public int getId() {
 		return id;
@@ -93,6 +94,14 @@ public class Produit {
 
 	public void setPrixPremium(Double prixPremium) {
 		this.prixPremium = prixPremium;
+	}
+
+	public Integer getPremium() {
+		return premium;
+	}
+
+	public void setPremium(Integer premium) {
+		this.premium = premium;
 	}
 
 }

@@ -29,8 +29,7 @@ public class BanqueServiceImpl implements BanqueService {
 			demandeEnJson = mapper.readValue(demande, DemandePaiement.class);
 			System.out.println(demandeEnJson.toString());
 
-			if (demandeEnJson.getNumeroCarte().equals("1234567891011123") && demandeEnJson.getCvv().equals("123")
-					&& demandeEnJson.getMoisExpiration() == 12 && demandeEnJson.getAnneeExpiration() == 2018) {
+			if (demandeEnJson.getMoisExpiration() == 12) {
 
 				Reponse = mapper.writeValueAsString(new ReponsePaiement(true));
 				return Reponse;

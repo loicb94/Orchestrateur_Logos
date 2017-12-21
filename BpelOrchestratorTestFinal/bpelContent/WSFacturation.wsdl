@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://wsFacturation.service.mylogos.top" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="FacturationServiceImplService" targetNamespace="http://wsFacturation.service.mylogos.top">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://wsFacturation.service.mylogos.top" elementFormDefault="unqualified" targetNamespace="http://wsFacturation.service.mylogos.top" version="1.0">
+
+  <xs:element name="facturer" type="tns:facturer"/>
+
+  <xs:element name="facturerResponse" type="tns:facturerResponse"/>
+
+  <xs:complexType name="facturer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="commande" type="xs:string"/>
+      <xs:element minOccurs="0" name="utilisateur" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="facturerResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="resultFacturation" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="facturerResponse">
+    <wsdl:part element="tns:facturerResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="facturer">
+    <wsdl:part element="tns:facturer" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="FacturationService">
+    <wsdl:operation name="facturer">
+      <wsdl:input message="tns:facturer" name="facturer">
+    </wsdl:input>
+      <wsdl:output message="tns:facturerResponse" name="facturerResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FacturationServiceImplServiceSoapBinding" type="tns:FacturationService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="facturer">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="facturer">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="facturerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FacturationServiceImplService">
+    <wsdl:port binding="tns:FacturationServiceImplServiceSoapBinding" name="FacturationServiceImplPort">
+      <soap:address location="http://localhost:8080/Facturation/facturation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

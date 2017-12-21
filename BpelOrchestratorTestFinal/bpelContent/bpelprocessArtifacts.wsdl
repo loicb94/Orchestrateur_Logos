@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://orchestrateur.mylogos.top" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://wsbanque.service.mylogos.top" xmlns:wsdl1="http://wsFacturation.service.mylogos.top" xmlns:wsdl2="http://wsBoutique.ws.mylogos.top" name="bpelprocess" targetNamespace="http://orchestrateur.mylogos.top">
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     TYPE DEFINITION - List of types participating in this BPEL process 
+     The BPEL Designer will generate default request and response types
+     but you can define or import any XML Schema type and use them as part 
+     of the message types.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="Paiement">
+    <plnk:role name="payer" portType="wsdl:BanqueService"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Facturation">
+    <plnk:role name="facturer" portType="wsdl1:FacturationService"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Transfert">
+    <plnk:role name="transferer" portType="wsdl2:IServiceBoutiqueBanque"/>
+  </plnk:partnerLinkType>
+    <import location="WSBanque.wsdl" namespace="http://wsbanque.service.mylogos.top"/>
+    <import location="WSFacturation.wsdl" namespace="http://wsFacturation.service.mylogos.top"/>
+    <import location="WSBoutique.wsdl" namespace="http://wsBoutique.ws.mylogos.top"/>
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://orchestrateur.mylogos.top">
+
+            <element name="bpelprocessRequest">
+                <complexType>
+                    <sequence>
+                    	<element name="informationBancaire" type="string"/>
+                    	<element name="commande" type="string"/>
+                    	<element name="utilisateur" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="bpelprocessResponse">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </types>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <message name="bpelprocessRequestMessage">
+        <part element="tns:bpelprocessRequest" name="payload"/>
+    </message>
+    <message name="bpelprocessResponseMessage">
+        <part element="tns:bpelprocessResponse" name="payload"/>
+    </message>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+
+    <!-- portType implemented by the bpelprocess BPEL process -->
+    <portType name="bpelprocess">
+        <operation name="process">
+            <input message="tns:bpelprocessRequestMessage"/>
+            <output message="tns:bpelprocessResponseMessage"/>
+        </operation>
+    </portType>   
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="bpelprocess">
+        <plnk:role name="bpelprocessProvider" portType="tns:bpelprocess"/>
+    </plnk:partnerLinkType>
+    
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     BINDING DEFINITION - Defines the message format and protocol details
+     for a web service.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <binding name="bpelprocessBinding" type="tns:bpelprocess">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    	<operation name="process">
+    		<soap:operation soapAction="http://orchestrateur.mylogos.top/process"/>
+    		<input>
+    			<soap:body use="literal"/>
+    		</input>
+    		<output>
+    			<soap:body use="literal"/>
+    		</output>
+    	</operation>
+    </binding>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     SERVICE DEFINITION - A service groups a set of ports into
+     a service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <service name="bpelprocessService">
+    	<port binding="tns:bpelprocessBinding" name="bpelprocessPort">
+    		<soap:address location="http://localhost:8282/ode/processes/bpelprocess"/>
+    	</port>
+    </service>
+</definitions>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:orchestrateur.mylogos.top="http://orchestrateur.mylogos.top" xmlns:wsBoutique.ws.mylogos.top="http://wsBoutique.ws.mylogos.top" xmlns:wsFacturation.service.mylogos.top="http://wsFacturation.service.mylogos.top" xmlns:wsbanque.service.mylogos.top="http://wsbanque.service.mylogos.top">
+  <process name="orchestrateur.mylogos.top:bpelprocess">
+    <active>true</active>
+    <retired>false</retired>
+    <process-events generate="all"/>
+    <provide partnerLink="client">
+      <service name="orchestrateur.mylogos.top:bpelprocessService" port="bpelprocessPort"/>
+    </provide>
+    <invoke partnerLink="PartnerLinkBanque">
+      <service name="wsbanque.service.mylogos.top:BanqueServiceImplService" port="BanqueServiceImplPort"/>
+    </invoke>
+    <invoke partnerLink="PartnerLinkFacturation">
+      <service name="wsFacturation.service.mylogos.top:FacturationServiceImplService" port="FacturationServiceImplPort"/>
+    </invoke>
+    <invoke partnerLink="PartnerLinkBoutique">
+      <service name="wsBoutique.ws.mylogos.top:ServiceBoutiqueBanqueService" port="ServiceBoutiqueBanquePort"/>
+    </invoke>
+  </process>
+</deploy>

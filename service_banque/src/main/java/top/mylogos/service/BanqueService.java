@@ -8,5 +8,5 @@ import top.mylogos.entity.ReponsePaiement;
 @WebService
 public interface BanqueService {
 
-	public ReponsePaiement demanderPaiement(DemandePaiement demande);
+	public String demanderPaiement(String demande);
 }

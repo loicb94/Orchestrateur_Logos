@@ -1,9 +1,13 @@
 package top.mylogos.service;
 
+import java.io.IOException;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import top.mylogos.entity.Commande;
 import top.mylogos.entity.Facture;
@@ -15,11 +19,24 @@ public class FacturationServiceImpl implements FacturationService {
 
 	@Override
 	@WebMethod
-	public int responseFacturation(Commande commande, Utilisateur utilisateur) {
+	public String responseFacturation(String commande, String utilisateur) {
 		int numDeFactureFake = 123456789;
-		Facture nouvelleFacture = new Facture(1, numDeFactureFake, commande);
+		String fakeNumber = Integer.toString(numDeFactureFake);
 
-		return numDeFactureFake;
+		ObjectMapper mapper = new ObjectMapper();
+		Commande commandeObj;
+		try {
+			commandeObj = mapper.readValue(commande, Commande.class);
+			Utilisateur utilisateurObj = mapper.readValue(utilisateur, Utilisateur.class);
+			Facture nouvelleFacture = new Facture(1, numDeFactureFake, commandeObj);
+
+			return fakeNumber;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }

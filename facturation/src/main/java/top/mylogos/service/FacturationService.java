@@ -8,6 +8,6 @@ import top.mylogos.entity.Utilisateur;
 @WebService
 public interface FacturationService {
 
-	public int responseFacturation(Commande commande, Utilisateur utilisateur);
+	public String responseFacturation(String commande, String utilisateur);
 
 }

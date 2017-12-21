@@ -3,6 +3,7 @@ package top.mylogos.service;
 import java.io.IOException;
 
 import javax.jws.WebMethod;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import org.springframework.stereotype.Service;
@@ -14,17 +15,18 @@ import top.mylogos.entity.Facture;
 import top.mylogos.entity.Utilisateur;
 
 @Service
-@WebService(endpointInterface = "top.mylogos.service.FacturationService")
+@WebService(endpointInterface = "top.mylogos.service.FacturationService", targetNamespace = "http://wsFacturation.service.mylogos.top")
 public class FacturationServiceImpl implements FacturationService {
 
 	@Override
-	@WebMethod
+
 	public String responseFacturation(String commande, String utilisateur) {
 		int numDeFactureFake = 123456789;
 		String fakeNumber = Integer.toString(numDeFactureFake);
 
 		ObjectMapper mapper = new ObjectMapper();
 		Commande commandeObj;
+		System.out.println("Je suis bien dans le WS facturation");
 		try {
 			commandeObj = mapper.readValue(commande, Commande.class);
 			Utilisateur utilisateurObj = mapper.readValue(utilisateur, Utilisateur.class);
